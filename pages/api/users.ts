@@ -1,0 +1,25 @@
+// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
+import type { NextApiRequest, NextApiResponse } from "next";
+import { client } from "../../utils/client";
+import { allUsersQuery } from "../../utils/queries"; // all documents with type user
+
+type Data = {
+  name: string;
+};
+
+// again TS syntax - defining req as type NextApiRequest
+// allows you to see instantly what can be used from that req
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse<Data>
+) {
+  if (req.method === "GET") {
+    const data = await client.fetch(allUsersQuery());
+
+    if (data) {
+      res.status(200).json(data);
+    } else {
+      res.json([]);
+    }
+  }
+}
